@@ -723,15 +723,126 @@
   .fill-blue { background: linear-gradient(90deg, var(--accent-blue), rgba(79,142,247,.6)); }
   .fill-green { background: linear-gradient(90deg, var(--accent-green), rgba(61,214,140,.6)); }
 
+  /* ─── TOPBAR HEADER ─── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    background: rgba(8,12,16,0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    user-select: none;
+  }
+
+  .logo-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: rgba(56,201,240,.12);
+    border: 1px solid rgba(56,201,240,.3);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo-icon svg { width: 18px; height: 18px; }
+
+  .logo-wordmark {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -.01em;
+    line-height: 1;
+  }
+
+  .logo-wordmark .w-data { color: var(--accent-cyan); }
+  .logo-wordmark .w-flow { color: var(--accent-cyan); opacity: .75; }
+  .logo-wordmark .w-ia {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-left: 5px;
+    vertical-align: middle;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 6px;
+    letter-spacing: .08em;
+  }
+
   /* ─── FOOTER ─── */
   .footer {
     border-top: 1px solid var(--border);
-    padding: 32px 0 0;
+    margin-top: 48px;
+    padding: 36px 0 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .footer-logo {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .footer-logo .logo-wordmark { font-size: 18px; }
+
+  .footer-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
     flex-wrap: wrap;
-    gap: 12px;
+    justify-content: center;
+  }
+
+  .footer-link {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    transition: color .2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .footer-link:hover { color: var(--accent-cyan); }
+
+  .footer-link svg { width: 13px; height: 13px; opacity: .6; flex-shrink: 0; }
+
+  .footer-divider {
+    width: 1px; height: 16px;
+    background: var(--border);
+  }
+
+  .footer-copy {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .footer-copy span { color: var(--accent-cyan); opacity: .7; }
+
+  .footer-glow-line {
+    width: 160px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+    opacity: .3;
   }
 
   .footer-text { font-size: 12px; color: var(--text-muted); }
@@ -829,14 +940,48 @@
     .card-trigger { padding: 16px 18px; }
     .card-content { padding: 0 18px 18px; padding-top: 18px; }
     .verdict-card { padding: 22px; }
-    .compare-table { font-size: 12px; }
-    .compare-table th, .compare-table td { padding: 9px 10px; }
+    .compare-table { font-size: 11px; display: block; overflow-x: auto; white-space: nowrap; }
+    .compare-table th, .compare-table td { padding: 8px 10px; }
+    .status-grid { grid-template-columns: 1fr 1fr; }
+    .hero { padding: 28px 0 32px; }
+    .hero h1 { font-size: 28px; }
+    .hero-meta { gap: 8px; }
+    .meta-pill { font-size: 10px; padding: 4px 10px; }
+    .section-header h2 { font-size: 11px; }
+    .controls-bar { gap: 6px; }
+    .ctrl-btn { font-size: 10px; padding: 5px 10px; }
+    .risk-badge { min-width: 64px; font-size: 9px; }
+    .reco-num { width: 20px; height: 20px; font-size: 10px; }
+    .wrapper { padding: 0 16px 60px; }
+    .logo-wordmark { font-size: 14px; }
+    .logo-wordmark .w-ia { display: none; }
+    .footer-links { gap: 12px; }
+    .footer-divider { display: none; }
+  }
+
+  @media (max-width: 400px) {
+    .status-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 24px; }
   }
 </style>
 </head>
 <body>
 
 <div class="scroll-progress" id="scrollBar"></div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <a class="logo" href="#">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#38c9f0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+    </div>
+    <div class="logo-wordmark">
+      <span class="w-data">DATA</span><span class="w-flow">FLOW</span><span class="w-ia">IA</span>
+    </div>
+  </a>
+</header>
 
 <nav class="toc-float" id="tocFloat">
   <div class="toc-dot active" data-section="0" data-label="Inicio"></div>
@@ -1699,10 +1844,39 @@
   </div>
 
   <!-- FOOTER -->
-  <div class="footer">
-    <div class="footer-text">Informe Jurídico — Regulación IA Chile 2026</div>
-    <div class="footer-text footer-mono">v1.0 · Abril 2026</div>
-  </div>
+  <footer class="footer">
+    <div class="footer-glow-line"></div>
+
+    <a class="footer-logo" href="#">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#38c9f0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <div class="logo-wordmark">
+        <span class="w-data">DATA</span><span class="w-flow">FLOW</span><span class="w-ia">IA</span>
+      </div>
+    </a>
+
+    <div class="footer-links">
+      <a class="footer-link" href="https://www.dataflowia.com" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        www.dataflowia.com
+      </a>
+      <div class="footer-divider"></div>
+      <a class="footer-link" href="mailto:contacto@dataflowia.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        contacto@dataflowia.com
+      </a>
+    </div>
+
+    <div class="footer-copy">
+      <span>©</span> 2026 DATAFLOW IA · Todos los derechos reservados<br>
+      Informe Jurídico — Regulación de Inteligencia Artificial en Chile · v1.0 · Abril 2026
+    </div>
+
+    <div class="footer-glow-line"></div>
+  </footer>
 
 </div><!-- /wrapper -->
 
