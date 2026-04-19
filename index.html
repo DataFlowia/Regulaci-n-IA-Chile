@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regulación IA Chile 2026 — Informe Jurídico</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-0: #080c10;
+    --bg-1: #0d1117;
+    --bg-2: #161b23;
+    --bg-3: #1e2530;
+    --bg-4: #252d3a;
+    --border: rgba(99,130,190,0.13);
+    --border-accent: rgba(99,160,255,0.28);
+    --accent-cyan: #38c9f0;
+    --accent-blue: #4f8ef7;
+    --accent-purple: #9b7ff4;
+    --accent-amber: #f5a623;
+    --accent-green: #3dd68c;
+    --accent-red: #f25c5c;
+    --text-primary: #e8edf5;
+    --text-secondary: #8b97ae;
+    --text-muted: #4e5d72;
+    --glow-cyan: 0 0 24px rgba(56,201,240,0.18);
+    --glow-blue: 0 0 24px rgba(79,142,247,0.18);
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-0);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE TEXTURE ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: .7;
+  }
+
+  /* ─── GRID BG ─── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(79,142,247,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,142,247,.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── MAIN LAYOUT ─── */
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    padding: 64px 0 52px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(56,201,240,.08);
+    border: 1px solid rgba(56,201,240,.22);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent-cyan);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    width: fit-content;
+  }
+
+  .hero-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent-cyan);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .4; transform: scale(.7); }
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 54px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    color: var(--text-primary);
+  }
+
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-blue) 50%, var(--accent-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text-secondary);
+    max-width: 640px;
+    font-weight: 300;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .meta-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+  }
+
+  .meta-pill svg { opacity: .6; }
+
+  /* ─── STATUS BAR ─── */
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+
+  .status-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color .2s, transform .2s;
+    cursor: default;
+  }
+
+  .status-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+  }
+
+  .status-card .label {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  .status-card .value {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .status-card .desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .c-cyan { color: var(--accent-cyan); }
+  .c-amber { color: var(--accent-amber); }
+  .c-red { color: var(--accent-red); }
+  .c-green { color: var(--accent-green); }
+  .c-purple { color: var(--accent-purple); }
+  .c-blue { color: var(--accent-blue); }
+
+  /* ─── SECTION HEADER ─── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 44px 0 20px;
+  }
+
+  .section-header .num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    min-width: 36px;
+    text-align: center;
+  }
+
+  .section-header h2 {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+  }
+
+  /* ─── COLLAPSIBLE CARD ─── */
+  .card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color .25s, box-shadow .25s;
+  }
+
+  .card:hover { border-color: var(--border-accent); }
+  .card.open { border-color: var(--border-accent); box-shadow: var(--glow-blue); }
+
+  .card-trigger {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    text-align: left;
+    transition: background .15s;
+  }
+
+  .card-trigger:hover { background: rgba(255,255,255,.02); }
+
+  .card-icon {
+    width: 40px; height: 40px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .icon-cyan { background: rgba(56,201,240,.1); }
+  .icon-blue { background: rgba(79,142,247,.1); }
+  .icon-purple { background: rgba(155,127,244,.1); }
+  .icon-amber { background: rgba(245,166,35,.1); }
+  .icon-green { background: rgba(61,214,140,.1); }
+  .icon-red { background: rgba(242,92,92,.1); }
+
+  .card-title-group { flex: 1; }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: block;
+    line-height: 1.3;
+  }
+
+  .card-subtitle {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 3px;
+    display: block;
+  }
+
+  .card-chevron {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--bg-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform .3s cubic-bezier(.4,0,.2,1), background .2s;
+  }
+
+  .card.open .card-chevron { transform: rotate(180deg); background: rgba(79,142,247,.2); }
+
+  .card-chevron svg {
+    width: 14px; height: 14px;
+    fill: none;
+    stroke: var(--text-secondary);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke .2s;
+  }
+
+  .card.open .card-chevron svg { stroke: var(--accent-blue); }
+
+  .card-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .45s cubic-bezier(.4,0,.2,1);
+  }
+
+  .card.open .card-body { max-height: 3000px; }
+
+  .card-content {
+    padding: 0 24px 24px;
+    border-top: 1px solid var(--border);
+    padding-top: 22px;
+  }
+
+  /* ─── CONTENT STYLES ─── */
+  .card-content p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+
+  .card-content p:last-child { margin-bottom: 0; }
+
+  .card-content h4 {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 20px 0 10px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+
+  .card-content ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card-content ul li {
+    display: flex;
+    gap: 10px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .card-content ul li::before {
+    content: '›';
+    color: var(--accent-cyan);
+    font-size: 16px;
+    line-height: 1.4;
+    flex-shrink: 0;
+  }
+
+  /* ─── COMPARISON TABLE ─── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+
+  .compare-table th {
+    background: var(--bg-3);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-table th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+  .compare-table th:last-child { border-radius: 0 var(--radius-sm) 0 0; }
+
+  .compare-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: rgba(255,255,255,.02); }
+
+  .compare-table td:first-child {
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  .badge-ok { background: rgba(61,214,140,.1); color: var(--accent-green); border: 1px solid rgba(61,214,140,.25); }
+  .badge-warn { background: rgba(245,166,35,.1); color: var(--accent-amber); border: 1px solid rgba(245,166,35,.25); }
+  .badge-err { background: rgba(242,92,92,.1); color: var(--accent-red); border: 1px solid rgba(242,92,92,.25); }
+  .badge-info { background: rgba(79,142,247,.1); color: var(--accent-blue); border: 1px solid rgba(79,142,247,.25); }
+
+  /* ─── CALLOUT BOXES ─── */
+  .callout {
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 13px;
+    line-height: 1.6;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  .callout-cyan { background: rgba(56,201,240,.07); border-left: 3px solid var(--accent-cyan); color: rgba(56,201,240,.85); }
+  .callout-amber { background: rgba(245,166,35,.07); border-left: 3px solid var(--accent-amber); color: rgba(245,166,35,.85); }
+  .callout-red { background: rgba(242,92,92,.07); border-left: 3px solid var(--accent-red); color: rgba(242,92,92,.85); }
+  .callout-green { background: rgba(61,214,140,.07); border-left: 3px solid var(--accent-green); color: rgba(61,214,140,.85); }
+  .callout-purple { background: rgba(155,127,244,.07); border-left: 3px solid var(--accent-purple); color: rgba(155,127,244,.85); }
+
+  /* ─── RISK PYRAMID ─── */
+  .risk-levels {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .risk-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--bg-3);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    transition: border-color .2s;
+  }
+
+  .risk-item:hover { border-color: var(--border-accent); }
+
+  .risk-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    min-width: 76px;
+    text-align: center;
+  }
+
+  .risk-1 { background: rgba(242,92,92,.15); color: var(--accent-red); }
+  .risk-2 { background: rgba(245,166,35,.15); color: var(--accent-amber); }
+  .risk-3 { background: rgba(79,142,247,.15); color: var(--accent-blue); }
+  .risk-4 { background: rgba(61,214,140,.12); color: var(--accent-green); }
+
+  .risk-text { font-size: 13px; color: var(--text-secondary); flex: 1; }
+  .risk-text strong { color: var(--text-primary); }
+
+  /* ─── SECTOR GRID ─── */
+  .sector-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 14px 0;
+  }
+
+  .sector-item {
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    transition: border-color .2s;
+  }
+
+  .sector-item:hover { border-color: var(--border-accent); }
+
+  .sector-item .s-title {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sector-item .s-body {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  /* ─── RECOS LIST ─── */
+  .reco-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 14px 0;
+  }
+
+  .reco-item {
+    display: flex;
+    gap: 14px;
+    background: var(--bg-3);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .reco-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-blue);
+    background: rgba(79,142,247,.1);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .reco-text { font-size: 13px; color: var(--text-secondary); line-height: 1.55; }
+  .reco-text strong { color: var(--text-primary); }
+
+  /* ─── VERDICT CARD ─── */
+  .verdict-card {
+    background: linear-gradient(135deg, rgba(79,142,247,.08) 0%, rgba(155,127,244,.08) 100%);
+    border: 1px solid rgba(79,142,247,.3);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin: 40px 0 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .verdict-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(79,142,247,.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .verdict-card .v-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    margin-bottom: 14px;
+  }
+
+  .verdict-card .v-quote {
+    font-family: var(--font-display);
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.4;
+    max-width: 680px;
+    margin: 0 auto 20px;
+  }
+
+  .verdict-card .v-quote em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .verdict-card .v-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ─── SOURCES ─── */
+  .source-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .source-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--bg-3);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    transition: border-color .2s;
+  }
+
+  .source-item:hover { border-color: var(--border-accent); }
+
+  .source-item a {
+    color: var(--accent-cyan);
+    text-decoration: none;
+    font-size: 13px;
+    word-break: break-word;
+    line-height: 1.5;
+  }
+
+  .source-item a:hover { text-decoration: underline; }
+
+  .source-dot {
+    width: 6px; height: 6px;
+    background: var(--accent-cyan);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+    opacity: .6;
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .gap-analysis {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 16px 0;
+  }
+
+  .gap-row {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .gap-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .gap-label { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+  .gap-pct { font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); }
+
+  .gap-track {
+    height: 6px;
+    background: var(--bg-4);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .gap-fill {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 1s cubic-bezier(.4,0,.2,1);
+    animation: growBar .9s cubic-bezier(.4,0,.2,1) both;
+  }
+
+  @keyframes growBar {
+    from { width: 0 !important; }
+  }
+
+  .fill-red { background: linear-gradient(90deg, var(--accent-red), rgba(242,92,92,.6)); }
+  .fill-amber { background: linear-gradient(90deg, var(--accent-amber), rgba(245,166,35,.6)); }
+  .fill-blue { background: linear-gradient(90deg, var(--accent-blue), rgba(79,142,247,.6)); }
+  .fill-green { background: linear-gradient(90deg, var(--accent-green), rgba(61,214,140,.6)); }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-text { font-size: 12px; color: var(--text-muted); }
+  .footer-mono { font-family: var(--font-mono); }
+
+  /* ─── SCROLL INDICATOR ─── */
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+    z-index: 100;
+    transition: width .1s linear;
+  }
+
+  /* ─── TOC SIDEBAR (desktop) ─── */
+  .toc-float {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 50;
+  }
+
+  .toc-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+    position: relative;
+  }
+
+  .toc-dot:hover, .toc-dot.active {
+    background: var(--accent-cyan);
+    transform: scale(1.5);
+  }
+
+  .toc-dot::after {
+    content: attr(data-label);
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+  }
+
+  .toc-dot:hover::after { opacity: 1; }
+
+  @media (max-width: 1200px) { .toc-float { display: none; } }
+
+  /* ─── EXPAND/COLLAPSE ALL ─── */
+  .controls-bar {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-bottom: 14px;
+  }
+
+  .ctrl-btn {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: .05em;
+  }
+
+  .ctrl-btn:hover {
+    border-color: var(--border-accent);
+    color: var(--accent-blue);
+    background: rgba(79,142,247,.05);
+  }
+
+  @media (max-width: 640px) {
+    .sector-grid { grid-template-columns: 1fr; }
+    .card-trigger { padding: 16px 18px; }
+    .card-content { padding: 0 18px 18px; padding-top: 18px; }
+    .verdict-card { padding: 22px; }
+    .compare-table { font-size: 12px; }
+    .compare-table th, .compare-table td { padding: 9px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollBar"></div>
+
+<nav class="toc-float" id="tocFloat">
+  <div class="toc-dot active" data-section="0" data-label="Inicio"></div>
+  <div class="toc-dot" data-section="1" data-label="Marco Normativo"></div>
+  <div class="toc-dot" data-section="2" data-label="Paradigmas IA vs Ley"></div>
+  <div class="toc-dot" data-section="3" data-label="Vacíos Regulatorios"></div>
+  <div class="toc-dot" data-section="4" data-label="Derechos ARCO"></div>
+  <div class="toc-dot" data-section="5" data-label="Recomendaciones"></div>
+  <div class="toc-dot" data-section="6" data-label="Fuentes"></div>
+</nav>
+
+<div class="wrapper">
+
+  <!-- HERO -->
+  <section class="hero" id="sec-0">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Chile · VERSIÓN 2026 · IA &amp; Derecho Digital
+    </div>
+    <h1>Regulación de<br><span>Inteligencia Artificial</span><br>en Chile</h1>
+    <p class="hero-sub">Diagnóstico jurídico completo: Ley 21.719, Derechos ARCO, vacíos regulatorios sectoriales y la brecha entre el avance tecnológico y la arquitectura normativa vigente.</p>
+    <div class="hero-meta">
+      <div class="meta-pill">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Abril 2026
+      </div>
+      <div class="meta-pill">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Informe Jurídico
+      </div>
+      <div class="meta-pill">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Derecho Comparado
+      </div>
+      <div class="meta-pill c-amber">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Sin ley integral de IA
+      </div>
+    </div>
+  </section>
+
+  <!-- STATUS GRID -->
+  <div class="status-grid">
+    <div class="status-card">
+      <span class="label">Estado normativo</span>
+      <span class="value c-amber">Fragmentado</span>
+      <span class="desc">Sin ley integral de IA al 2026</span>
+    </div>
+    <div class="status-card">
+      <span class="label">Vigencia Ley 21.719</span>
+      <span class="value c-cyan">Dic 2026</span>
+      <span class="desc">Protección de datos personales</span>
+    </div>
+    <div class="status-card">
+      <span class="label">Referente global</span>
+      <span class="value c-blue">AI Act UE</span>
+      <span class="desc">En vigor desde agosto 2024</span>
+    </div>
+    <div class="status-card">
+      <span class="label">Vacíos críticos</span>
+      <span class="value c-red">5</span>
+      <span class="desc">Salud, Justicia, RRHH, Estado, PI</span>
+    </div>
+    <div class="status-card">
+      <span class="label">Modelo propuesto</span>
+      <span class="value c-green">Híbrido</span>
+      <span class="desc">Ley marco + regulación sectorial</span>
+    </div>
+  </div>
+
+  <!-- ═══ SECCIÓN 1: MARCO NORMATIVO ═══ -->
+  <div class="section-header" id="sec-1">
+    <span class="num">01</span>
+    <h2>Marco Normativo Vigente</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="controls-bar">
+    <button class="ctrl-btn" onclick="toggleAll('s1',true)">+ Expandir todo</button>
+    <button class="ctrl-btn" onclick="toggleAll('s1',false)">− Colapsar todo</button>
+  </div>
+
+  <div data-group="s1">
+
+    <div class="card" id="card-respuesta">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-cyan">⚡</div>
+        <div class="card-title-group">
+          <span class="card-title">Respuesta Breve: El diagnóstico</span>
+          <span class="card-subtitle">Posición dominante de la doctrina jurídica chilena</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <div class="callout callout-amber">
+            <span class="callout-icon">⚠</span>
+            <span>Chile <strong>no cuenta</strong> con una ley general e integral de IA equivalente al AI Act europeo al mes de abril de 2026.</span>
+          </div>
+          <p>Sin embargo, el país sí dispone de un conjunto de normas y principios que afectan directamente el diseño, entrenamiento, despliegue y uso de sistemas de IA, especialmente en materia de datos personales, acceso a la información, responsabilidad, debido proceso y tutela de derechos fundamentales.</p>
+          <p>La posición dominante entre abogados, académicos y especialistas en derecho digital es que Chile debe avanzar hacia una <strong>regulación de IA basada en riesgos</strong>, derechos fundamentales, trazabilidad, supervisión humana y mecanismos de auditoría, evitando una sobrerregulación rígida que quede rápidamente obsoleta.</p>
+          <div class="callout callout-cyan">
+            <span class="callout-icon">💡</span>
+            <span>La brecha regulatoria genera una "regulación por remisión": el abogado debe ensamblar piezas normativas dispersas en vez de aplicar un único marco especializado.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-blue">🛡</div>
+        <div class="card-title-group">
+          <span class="card-title">Ley 21.719 — Protección de Datos Personales</span>
+          <span class="card-subtitle">Vigencia: diciembre 2026 · El pilar principal de gobernanza algorítmica</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <p>El principal cuerpo normativo que hoy impacta a la inteligencia artificial en Chile. La IA opera mediante recopilación, inferencia, perfilamiento y reutilización intensiva de datos personales, lo que la pone directamente bajo su ámbito.</p>
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>Módulo</th>
+                <th>Estado</th>
+                <th>Descripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Datos Sensibles Ampliados</td>
+                <td><span class="badge badge-ok">✓ Activo</span></td>
+                <td>Inclusión explícita de biometría y genética</td>
+              </tr>
+              <tr>
+                <td>Consentimiento Reforzado</td>
+                <td><span class="badge badge-ok">✓ Activo</span></td>
+                <td>Autorización inequívoca, libre e informada</td>
+              </tr>
+              <tr>
+                <td>Portabilidad de Datos</td>
+                <td><span class="badge badge-ok">✓ Activo</span></td>
+                <td>Derecho del titular a transferir sus datos</td>
+              </tr>
+              <tr>
+                <td>Alerta de Brechas</td>
+                <td><span class="badge badge-ok">✓ Activo</span></td>
+                <td>Obligación de notificar incidentes de seguridad</td>
+              </tr>
+              <tr>
+                <td>DPO e Interés Legítimo</td>
+                <td><span class="badge badge-warn">⏳ Pendiente</span></td>
+                <td>Implementación del Delegado de Protección de Datos</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="callout callout-red">
+            <span class="callout-icon">🔴</span>
+            <span><strong>La caja de Pandora del Interés Legítimo:</strong> Esta base de licitud permite tratar datos sin consentimiento explícito si es necesario para satisfacer intereses del responsable, habilitando perfilamiento masivo vía autoevaluación corporativa.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-purple">⚖</div>
+        <div class="card-title-group">
+          <span class="card-title">Responsabilidad Civil, Consumo, Trabajo y Propiedad Intelectual</span>
+          <span class="card-subtitle">El mosaico normativo: regulación indirecta vigente</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <p>Aunque Chile no tiene una ley horizontal de IA, la utilización de estos sistemas ya se encuentra alcanzada por reglas generales de múltiples áreas del derecho.</p>
+          <div class="sector-grid">
+            <div class="sector-item">
+              <div class="s-title">📋 Ley N° 20.393</div>
+              <div class="s-body">Responsabilidad penal de personas jurídicas. El uso de IA para automatizar decisiones o redactar contratos vinculantes requiere Modelos de Prevención de Delitos para evitar cohecho y faltas a la probidad.</div>
+            </div>
+            <div class="sector-item">
+              <div class="s-title">🔒 Secreto Profesional</div>
+              <div class="s-body">Ingresar información sensible de clientes en herramientas de IA de acceso público vulnera directamente el mandato deontológico y constitucional de confidencialidad del abogado.</div>
+            </div>
+            <div class="sector-item">
+              <div class="s-title">🏛 Acto Administrativo</div>
+              <div class="s-body">Los principios de legalidad, publicidad, motivación del acto administrativo y protección de datos actúan como controles indirectos sobre la automatización estatal.</div>
+            </div>
+            <div class="sector-item">
+              <div class="s-title">💡 Propiedad Intelectual</div>
+              <div class="s-body">Sin ley especial, controversias sobre uso de obras preexistentes y outputs de IA generativa deben resolverse por analogía con normas de PI y contratos.</div>
+            </div>
+          </div>
+          <div class="callout callout-purple">
+            <span class="callout-icon">⚡</span>
+            <span>Muchos conflictos sobre IA en Chile se resolverán mediante normas preexistentes adaptadas por interpretación judicial o doctrinal — flexibilidad, pero también incertidumbre regulatoria.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /s1 -->
+
+  <!-- ═══ SECCIÓN 2: PARADIGMAS EN CONFLICTO ═══ -->
+  <div class="section-header" id="sec-2">
+    <span class="num">02</span>
+    <h2>Paradigmas en Conflicto: IA vs. Legislación Tradicional</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="controls-bar">
+    <button class="ctrl-btn" onclick="toggleAll('s2',true)">+ Expandir todo</button>
+    <button class="ctrl-btn" onclick="toggleAll('s2',false)">− Colapsar todo</button>
+  </div>
+
+  <div data-group="s2">
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-amber">⚡</div>
+        <div class="card-title-group">
+          <span class="card-title">La Brecha de Velocidad Tecnológica</span>
+          <span class="card-subtitle">Por qué esperar no es una estrategia</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <table class="compare-table">
+            <thead>
+              <tr><th>Dimensión</th><th>IA (ChatGPT, Claude...)</th><th>Legislación Chilena</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Naturaleza</td>
+                <td>Probabilística, predictiva (Caja negra)</td>
+                <td>Determinística y taxativa (Códigos)</td>
+              </tr>
+              <tr>
+                <td>Iteración</td>
+                <td>Actualizaciones continuas, despliegue global</td>
+                <td>Proceso bicameral, territorial y secuencial</td>
+              </tr>
+              <tr>
+                <td>Tolerancia al Error</td>
+                <td>Entrenada mediante "ensayo y error"</td>
+                <td>Exige certeza jurídica y rigor absoluto</td>
+              </tr>
+              <tr>
+                <td>Explicabilidad</td>
+                <td>Opaca: los LLM predicen secuencias, no razonan</td>
+                <td>Transparente: exige motivación en fallos y dictámenes</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="callout callout-red">
+            <span class="callout-icon">⚠</span>
+            <span>La IA ya se integra en reclutamiento, scoring, vigilancia, marketing predictivo y análisis institucional, mientras el ordenamiento chileno carece de arquitectura normativa específica.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-blue">🔬</div>
+        <div class="card-title-group">
+          <span class="card-title">IA Genérica vs. IA Jurídica Especializada</span>
+          <span class="card-subtitle">Alucinación Legal: el riesgo real de ChatGPT en la abogacía</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <div class="callout callout-amber">
+            <span class="callout-icon">⚠</span>
+            <span>El fenómeno de la "Alucinación Legal" (invención de jurisprudencia o normas derogadas) ya ha provocado la sanción de abogados a nivel internacional. En Chile, citar fallos inexistentes constituye una falta grave a la ética profesional.</span>
+          </div>
+          <div class="sector-grid">
+            <div class="sector-item">
+              <div class="s-title c-red">✗ IA Genérica</div>
+              <div class="s-body">
+                <strong>ChatGPT estándar, Claude libre:</strong><br>
+                • Base: Internet abierta (sesgos, info obsoleta)<br>
+                • Mecanismo: probabilidad lingüística, no validez jurídica<br>
+                • Alto riesgo de alucinación y pérdida de confidencialidad<br>
+                • <em>Inapropiada para tareas jurídicas críticas</em>
+              </div>
+            </div>
+            <div class="sector-item">
+              <div class="s-title c-green">✓ IA Jurídica</div>
+              <div class="s-body">
+                <strong>SOFIA 3.0, CoCounsel, Cicerai:</strong><br>
+                • Base: ecosistemas cerrados y verificados<br>
+                • Mecanismo: PLN vinculado a fuentes oficiales<br>
+                • Riesgo mitigado con citadores integrados<br>
+                • <em>Estándar requerido para investigación profunda</em>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-purple">🌍</div>
+        <div class="card-title-group">
+          <span class="card-title">El Horizonte Regulatorio: El AI Act Europeo y su influencia</span>
+          <span class="card-subtitle">El "Efecto Bruselas" y la importación del estándar europeo</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <p>Al igual que ocurrió con el RGPD, la legislación chilena sobre IA no se escribirá desde cero, sino que se modelará sobre los estándares globales emergentes. El AI Act de la UE, en vigor desde agosto de 2024, establece el modelo regulatorio ineludible.</p>
+          <div class="risk-levels">
+            <div class="risk-item">
+              <span class="risk-badge risk-1">NIVEL 1 · PROHIBIDO</span>
+              <div class="risk-text"><strong>Riesgo Inaceptable.</strong> Sistemas prohibidos. Manipulación cognitiva o puntuación social. (Aplicación: Febrero 2025 en UE)</div>
+            </div>
+            <div class="risk-item">
+              <span class="risk-badge risk-2">NIVEL 2 · ALTO</span>
+              <div class="risk-text"><strong>Sistemas que afectan derechos fundamentales o se usan en Justicia.</strong> Requieren supervisión humana estricta, documentación exhaustiva y auditorías. Aquí recaerá gran parte de la tecnología legal analítica. (Agosto 2026 en UE)</div>
+            </div>
+            <div class="risk-item">
+              <span class="risk-badge risk-3">NIVEL 3 · LIMITADO</span>
+              <div class="risk-text"><strong>Chatbots jurídicos básicos.</strong> Sujetos a deberes de transparencia: el usuario debe saber que habla con una IA.</div>
+            </div>
+            <div class="risk-item">
+              <span class="risk-badge risk-4">NIVEL 4 · MÍNIMO</span>
+              <div class="risk-text"><strong>Riesgo Mínimo.</strong> Sistemas de clasificación documental simple o filtros de spam en el despacho.</div>
+            </div>
+          </div>
+          <div class="callout callout-cyan">
+            <span class="callout-icon">💡</span>
+            <span>Para despachos chilenos, anticiparse a este estándar es la única forma de garantizar que las implementaciones tecnológicas de hoy sigan siendo legales mañana.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /s2 -->
+
+  <!-- ═══ SECCIÓN 3: VACÍOS REGULATORIOS ═══ -->
+  <div class="section-header" id="sec-3">
+    <span class="num">03</span>
+    <h2>Radar de Amenazas: Vacíos Regulatorios Sectoriales</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="controls-bar">
+    <button class="ctrl-btn" onclick="toggleAll('s3',true)">+ Expandir todo</button>
+    <button class="ctrl-btn" onclick="toggleAll('s3',false)">− Colapsar todo</button>
+  </div>
+
+  <div data-group="s3">
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-red">⚖</div>
+        <div class="card-title-group">
+          <span class="card-title">Justicia y Proceso Judicial</span>
+          <span class="card-subtitle">Opacidad algorítmica · Sesgos no auditables · Motivación del acto</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <p>No existen reglas claras sobre límites, supervisión y responsabilidad en el uso de IA en el proceso judicial chileno.</p>
+          <h4>Caso práctico</h4>
+          <p>Si un tribunal usa un sistema de priorización automática para clasificar causas o predecir desenlaces: sin reglas específicas surgen preguntas sobre sesgo, debido proceso, motivación judicial y dependencia excesiva de sistemas opacos. El algoritmo no "razona" — predice secuencias estadísticas.</p>
+          <div class="callout callout-red">
+            <span class="callout-icon">🔴</span>
+            <span>La falta de motivación del acto administrativo por uso de algoritmos viola el principio constitucional de fundamentación de las resoluciones judiciales.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-amber">👤</div>
+        <div class="card-title-group">
+          <span class="card-title">Empleo y Recursos Humanos</span>
+          <span class="card-subtitle">Descarte algorítmico sin explicabilidad · Vigilancia de productividad</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <p>No existe en Chile regulación específica sobre uso de IA para filtrar currículums, rankear postulantes, analizar videoentrevistas o monitorear productividad laboral en tiempo real.</p>
+          <h4>Caso práctico</h4>
+          <p>Una empresa puede usar un modelo para descartar candidatos en base a patrones históricos. El control jurídico se haría indirectamente por no discriminación, datos personales y derecho laboral, sin estándares detallados de auditoría algorítmica ni obligaciones legales expresas de explicabilidad frente al postulante rechazado.</p>
+          <div class="callout callout-amber">
+            <span class="callout-icon">⚠</span>
+            <span>Los sesgos estadísticos heredados de datos históricos pueden perpetuar y amplificar discriminaciones sistémicas sin que ninguna norma chilena lo capture explícitamente.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-red">🏥</div>
+        <div class="card-title-group">
+          <span class="card-title">Salud</span>
+          <span class="card-subtitle">Datos ultra-sensibles · Inferencias de alto impacto · Responsabilidad médica</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <p>El uso de IA en salud presenta la brecha regulatoria más delicada: combina datos sensibles, inferencias de alto impacto y riesgos sobre integridad física, consentimiento y responsabilidad profesional.</p>
+          <h4>Caso práctico</h4>
+          <p>Un sistema de apoyo diagnóstico o de priorización clínica puede afectar el acceso a prestaciones o la oportunidad del tratamiento. Sin regulación específica de IA clínica, la respuesta jurídica depende de normas sanitarias generales, datos personales, responsabilidad médica y estándares técnicos no necesariamente vinculantes.</p>
+          <div class="callout callout-red">
+            <span class="callout-icon">🔴</span>
+            <span>No existe en Chile un régimen de responsabilidad claro cuando un sistema de IA contribuye a un error médico. ¿Responde el médico? ¿El proveedor del software? ¿El hospital?</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-purple">✍</div>
+        <div class="card-title-group">
+          <span class="card-title">IA Generativa y Propiedad Intelectual</span>
+          <span class="card-subtitle">Extracción de obras protegidas · Titularidad de outputs · Confusión normativa</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <p>Chile no tiene marco específico para resolver entrenamiento de modelos con obras protegidas, titularidad de resultados generados por IA, licencias de datasets o responsabilidad por outputs infractores o engañosos.</p>
+          <h4>Caso práctico</h4>
+          <p>Si una empresa entrena un sistema generativo para producir textos, imágenes o código con salida comercial, las controversias sobre uso de obras preexistentes deben resolverse por analogía con normas de propiedad intelectual y contratos, no por una ley chilena especializada.</p>
+          <div class="callout callout-purple">
+            <span class="callout-icon">💡</span>
+            <span>Pregunta sin respuesta normativa clara: ¿Quién es el autor de un texto generado por IA? ¿El usuario, la empresa desarrolladora, o nadie?</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-blue">🏛</div>
+        <div class="card-title-group">
+          <span class="card-title">Sector Público y Decisiones Automatizadas del Estado</span>
+          <span class="card-subtitle">Sin régimen transversal · Sin explicabilidad obligatoria · Sin auditoría</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <p>Chile no dispone de un régimen transversal y detallado que establezca cuándo el Estado puede usar IA, qué exigencias de explicabilidad deben cumplirse, cómo se auditan los modelos, y qué derechos tiene el ciudadano para pedir revisión humana.</p>
+          <h4>Caso práctico</h4>
+          <p>Si un organismo público utiliza un sistema de priorización automática para fiscalizaciones, asignación de beneficios o detección de fraude, la discusión jurídica descansaría en principios de legalidad, igualdad y transparencia, pero no en un estatuto chileno específico de IA administrativa.</p>
+          <div class="callout callout-amber">
+            <span class="callout-icon">⚠</span>
+            <span>La transparencia activa es especialmente débil: la ley chilena obliga al ciudadano a buscar activamente quién procesa sus datos, imposibilitando auditar tratamientos ocultos en el aparato del Estado.</span>
+          </div>
+          <h4>Comparación GDPR vs. Ley Chilena</h4>
+          <table class="compare-table">
+            <thead>
+              <tr><th>Dimensión</th><th>GDPR (Óptimo)</th><th>Ley Chilena (Actual)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Carga de la Prueba</td>
+                <td>El responsable prueba motivos imperiosos</td>
+                <td>El titular debe probar afectación de derechos fundamentales</td>
+              </tr>
+              <tr>
+                <td>Derecho de Acceso</td>
+                <td>Absoluto y con transparencia activa</td>
+                <td>Limitado por 4 excepciones; carga investigativa en el titular</td>
+              </tr>
+              <tr>
+                <td>Decisiones Automatizadas</td>
+                <td>Derecho explícito a no ser objeto de decisiones algorítmicas</td>
+                <td>Solo derecho a oponerse a valoraciones automatizadas</td>
+              </tr>
+              <tr>
+                <td>Elaboración de Perfiles</td>
+                <td>Derecho directo a oposición</td>
+                <td>Condicionado a que exista proceso estrictamente automatizado</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Brecha Progress Bars -->
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-red">📊</div>
+        <div class="card-title-group">
+          <span class="card-title">Índice de Brecha Regulatoria por Sector</span>
+          <span class="card-subtitle">Estimación cualitativa de la exposición regulatoria actual</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <div class="gap-analysis">
+            <div class="gap-row">
+              <div class="gap-label-row"><span class="gap-label">IA Generativa / Propiedad Intelectual</span><span class="gap-pct">95%</span></div>
+              <div class="gap-track"><div class="gap-fill fill-red" style="width:95%"></div></div>
+            </div>
+            <div class="gap-row">
+              <div class="gap-label-row"><span class="gap-label">Sector Público / Decisiones del Estado</span><span class="gap-pct">88%</span></div>
+              <div class="gap-track"><div class="gap-fill fill-red" style="width:88%"></div></div>
+            </div>
+            <div class="gap-row">
+              <div class="gap-label-row"><span class="gap-label">Salud / IA Clínica</span><span class="gap-pct">85%</span></div>
+              <div class="gap-track"><div class="gap-fill fill-red" style="width:85%"></div></div>
+            </div>
+            <div class="gap-row">
+              <div class="gap-label-row"><span class="gap-label">Justicia / Proceso Judicial</span><span class="gap-pct">80%</span></div>
+              <div class="gap-track"><div class="gap-fill fill-amber" style="width:80%"></div></div>
+            </div>
+            <div class="gap-row">
+              <div class="gap-label-row"><span class="gap-label">Empleo y RRHH</span><span class="gap-pct">72%</span></div>
+              <div class="gap-track"><div class="gap-fill fill-amber" style="width:72%"></div></div>
+            </div>
+            <div class="gap-row">
+              <div class="gap-label-row"><span class="gap-label">Datos Personales (post Ley 21.719)</span><span class="gap-pct">35%</span></div>
+              <div class="gap-track"><div class="gap-fill fill-blue" style="width:35%"></div></div>
+            </div>
+          </div>
+          <p style="font-size:11px; color: var(--text-muted); margin-top: 12px;">* 100% = vacío total · 0% = regulación completa. Estimación doctrinal cualitativa.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /s3 -->
+
+  <!-- ═══ SECCIÓN 4: DERECHOS ARCO ═══ -->
+  <div class="section-header" id="sec-4">
+    <span class="num">04</span>
+    <h2>Derechos ARCO y Gobernanza Algorítmica</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="controls-bar">
+    <button class="ctrl-btn" onclick="toggleAll('s4',true)">+ Expandir todo</button>
+    <button class="ctrl-btn" onclick="toggleAll('s4',false)">− Colapsar todo</button>
+  </div>
+
+  <div data-group="s4">
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-cyan">🔐</div>
+        <div class="card-title-group">
+          <span class="card-title">Vulnerabilidad 1: Restricciones al Derecho de Acceso</span>
+          <span class="card-subtitle">Falta de transparencia activa · Carga investigativa en el titular</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <p>Mientras el GDPR europeo garantiza acceso irrestricto y sin excepciones al conocimiento de qué, cómo y por qué se tratan los datos, incluyendo la lógica de decisiones automatizadas, la ley chilena reconoce cuatro causales de restricción:</p>
+          <div class="risk-levels">
+            <div class="risk-item">
+              <span class="risk-badge risk-1">ERROR 01</span>
+              <div class="risk-text">El titular ya dispone de la información</div>
+            </div>
+            <div class="risk-item">
+              <span class="risk-badge risk-2">ERROR 02</span>
+              <div class="risk-text">Esfuerzo desproporcionado o imposibilidad técnica</div>
+            </div>
+            <div class="risk-item">
+              <span class="risk-badge risk-3">ERROR 03</span>
+              <div class="risk-text">Fines estadísticos, históricos o científicos</div>
+            </div>
+            <div class="risk-item">
+              <span class="risk-badge risk-4">ERROR 04</span>
+              <div class="risk-text">Excepción dispuesta expresamente por ley</div>
+            </div>
+          </div>
+          <div class="callout callout-amber">
+            <span class="callout-icon">⚠</span>
+            <span><strong>Falla crítica:</strong> La ley chilena obliga al usuario a buscar activamente quién procesa sus datos, imposibilitando auditar tratamientos ocultos en contextos de IA.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-red">🧱</div>
+        <div class="card-title-group">
+          <span class="card-title">Vulnerabilidad 2: El Cortafuegos Defectuoso de la Oposición</span>
+          <span class="card-subtitle">Asimetría de estándares entre responsable y titular</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <p>La ley crea una paradoja de asimetría: para tratar datos, el responsable solo necesita justificar interés legítimo (estándar bajo). Para oponerse, el ciudadano debe demostrar que el tratamiento afecta sus derechos fundamentales (estándar altísimo).</p>
+          <div class="callout callout-red">
+            <span class="callout-icon">🔴</span>
+            <span><strong>Falla de diseño:</strong> Al exigir afectación de derechos fundamentales, la ley hace casi imposible para un usuario bloquear legalmente la elaboración de perfiles comerciales automatizados.</span>
+          </div>
+          <p>Esto tiene consecuencias directas en el ecosistema de IA: el perfilamiento algorítmico masivo bajo la excusa de "mejora de servicios" puede operar sin intervención humana real, sin que el afectado cuente con mecanismos efectivos de defensa.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-purple">🤖</div>
+        <div class="card-title-group">
+          <span class="card-title">Protocolo Operativo: El "Humano en el Bucle"</span>
+          <span class="card-subtitle">El estándar mínimo para la abogacía chilena hoy</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <p>Ante el vacío normativo y las exigencias del futuro, la abogacía chilena debe implementar de inmediato este protocolo de trabajo colaborativo con IA:</p>
+          <div class="reco-list">
+            <div class="reco-item">
+              <span class="reco-num">1</span>
+              <div class="reco-text"><strong>Ingesta de Datos (IA):</strong> Anonimización estricta. Jamás ingresar datos confidenciales o sujetos a secreto profesional en modelos de lenguaje abiertos.</div>
+            </div>
+            <div class="reco-item">
+              <span class="reco-num">2</span>
+              <div class="reco-text"><strong>Generación y Análisis (IA):</strong> Uso de prompts estructurados para revisión de contratos o resúmenes de extensa jurisprudencia.</div>
+            </div>
+            <div class="reco-item">
+              <span class="reco-num">3</span>
+              <div class="reco-text"><strong>El Filtro Crítico (Humano):</strong> Verificación sistemática de todas las citas normativas (evitar alucinaciones) y análisis de posibles sesgos algorítmicos.</div>
+            </div>
+            <div class="reco-item">
+              <span class="reco-num">4</span>
+              <div class="reco-text"><strong>Validación Legal (Humano):</strong> La decisión final, la interpretación de la norma y la firma del escrito corresponden única y exclusivamente al profesional del derecho. <em>La IA sugiere; el abogado decide.</em></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /s4 -->
+
+  <!-- ═══ SECCIÓN 5: RECOMENDACIONES ═══ -->
+  <div class="section-header" id="sec-5">
+    <span class="num">05</span>
+    <h2>Evaluación y Recomendaciones Normativas</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="controls-bar">
+    <button class="ctrl-btn" onclick="toggleAll('s5',true)">+ Expandir todo</button>
+    <button class="ctrl-btn" onclick="toggleAll('s5',false)">− Colapsar todo</button>
+  </div>
+
+  <div data-group="s5">
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-green">✅</div>
+        <div class="card-title-group">
+          <span class="card-title">Arquitectura Híbrida: El "Parche 3.0" Requerido</span>
+          <span class="card-subtitle">Ley marco + regulación sectorial + coordinación institucional</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <p>La opción más sólida para Chile no es libertad regulatoria plena ni copia mecánica de modelos extranjeros, sino una arquitectura híbrida de cuatro módulos:</p>
+          <div class="sector-grid">
+            <div class="sector-item">
+              <div class="s-title c-amber">⚡ Módulo de Riesgo</div>
+              <div class="s-body">Regulación sectorial basada en categorías de riesgo. Alto impacto = obligaciones reforzadas.</div>
+            </div>
+            <div class="sector-item">
+              <div class="s-title c-cyan">🔍 Módulo de Explicabilidad</div>
+              <div class="s-body">Derecho inalienable a revisión humana y explicación razonable frente a decisiones automatizadas.</div>
+            </div>
+            <div class="sector-item">
+              <div class="s-title c-blue">📋 Módulo de Auditoría</div>
+              <div class="s-body">Evaluaciones de impacto algorítmico obligatorias, especialmente en Estado, Salud y RRHH.</div>
+            </div>
+            <div class="sector-item">
+              <div class="s-title c-green">🏛 Gobernanza Central</div>
+              <div class="s-body">Autoridad técnica interinstitucional capaz de actualizar estándares tecnológicos, fusionando ciberseguridad, datos y responsabilidad civil.</div>
+            </div>
+          </div>
+          <div class="callout callout-green">
+            <span class="callout-icon">✓</span>
+            <span>La protección no se logra con una prohibición rígida, sino con un sistema de <strong>trazabilidad y supervisión humana permanente.</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-blue">📋</div>
+        <div class="card-title-group">
+          <span class="card-title">Agenda Regulatoria: 6 Líneas de Acción</span>
+          <span class="card-subtitle">Hoja de ruta razonable para el legislador chileno</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <div class="reco-list">
+            <div class="reco-item">
+              <span class="reco-num">1</span>
+              <div class="reco-text"><strong>Clasificación por riesgo:</strong> Definir categorías para sistemas de IA y establecer obligaciones reforzadas para usos de alto impacto.</div>
+            </div>
+            <div class="reco-item">
+              <span class="reco-num">2</span>
+              <div class="reco-text"><strong>Derechos de información y revisión:</strong> Reconocer derechos de explicación razonable y revisión humana frente a decisiones automatizadas con efectos relevantes.</div>
+            </div>
+            <div class="reco-item">
+              <span class="reco-num">3</span>
+              <div class="reco-text"><strong>Evaluaciones de impacto algorítmico:</strong> Obligatorias en sector público, salud, empleo, educación, seguridad y servicios financieros.</div>
+            </div>
+            <div class="reco-item">
+              <span class="reco-num">4</span>
+              <div class="reco-text"><strong>Trazabilidad y gobernanza del ciclo de vida:</strong> Establecer deberes de documentación desde el diseño hasta el retiro del modelo.</div>
+            </div>
+            <div class="reco-item">
+              <span class="reco-num">5</span>
+              <div class="reco-text"><strong>Coordinación sistémica:</strong> Articular la futura regulación de IA con el sistema chileno de protección de datos, ciberseguridad y responsabilidad civil.</div>
+            </div>
+            <div class="reco-item">
+              <span class="reco-num">6</span>
+              <div class="reco-text"><strong>Autoridad técnica interinstitucional:</strong> Con capacidad real para emitir criterios, fiscalizar, sancionar y actualizar estándares conforme evolucione la tecnología.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /s5 -->
+
+  <!-- ═══ SECCIÓN 6: FUENTES ═══ -->
+  <div class="section-header" id="sec-6">
+    <span class="num">06</span>
+    <h2>Bibliografía y Fuentes</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="controls-bar">
+    <button class="ctrl-btn" onclick="toggleAll('s6',true)">+ Expandir todo</button>
+    <button class="ctrl-btn" onclick="toggleAll('s6',false)">− Colapsar todo</button>
+  </div>
+
+  <div data-group="s6">
+    <div class="card open">
+      <button class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-icon icon-cyan">📚</div>
+        <div class="card-title-group">
+          <span class="card-title">Normativa, Doctrina y Regulación Comparada</span>
+          <span class="card-subtitle">Fuentes primarias y doctrina jurídica especializada</span>
+        </div>
+        <div class="card-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="card-body">
+        <div class="card-content">
+          <h4>Normativa y Doctrina Chilena</h4>
+          <div class="source-grid">
+            <div class="source-item">
+              <div class="source-dot"></div>
+              <a href="https://rchdt.uchile.cl/index.php/RCHDT/article/download/67205/70914" target="_blank">Comentarios al proyecto de ley chileno sobre protección de datos personales — Revista Chilena de Derecho y Tecnología</a>
+            </div>
+            <div class="source-item">
+              <div class="source-dot"></div>
+              <a href="http://www.rchdt.uchile.cl/index.php/RCHDT/article/view/26959" target="_blank">Derecho de acceso a la información pública y protección de datos personales — RCHDT, U. de Chile</a>
+            </div>
+            <div class="source-item">
+              <div class="source-dot"></div>
+              <a href="https://www.gestionytendencias.cl/index.php/GT/article/view/164" target="_blank">Protección de datos personales: ¿Qué esperar tras la entrada en vigencia de la nueva ley?</a>
+            </div>
+            <div class="source-item">
+              <div class="source-dot"></div>
+              <span style="color: var(--text-secondary); font-size:13px">Interés legítimo y tratamiento de datos personales: antecedentes comparados y regulación en Chile</span>
+            </div>
+            <div class="source-item">
+              <div class="source-dot"></div>
+              <span style="color: var(--text-secondary); font-size:13px">¿Abriendo la caja de Pandora? El interés legítimo en la reforma a la Ley 19.628</span>
+            </div>
+            <div class="source-item">
+              <div class="source-dot"></div>
+              <span style="color: var(--text-secondary); font-size:13px">Grupos vulnerables y tutela civil en la nueva regulación de protección de datos en Chile</span>
+            </div>
+          </div>
+          <h4 style="margin-top:22px;">Regulación de IA y Derecho Comparado</h4>
+          <div class="source-grid">
+            <div class="source-item">
+              <div class="source-dot"></div>
+              <a href="https://erevistas.uacj.mx/ojs/index.php/reij/article/view/6744" target="_blank">Regulación de la IA en el proceso judicial: desafíos y oportunidades en América Latina</a>
+            </div>
+            <div class="source-item">
+              <div class="source-dot"></div>
+              <a href="https://revistalatam.redilat.org/index.php/lt/article/view/5475" target="_blank">Regulación adaptativa de la inteligencia artificial en Colombia: análisis desde los principios de la OCDE</a>
+            </div>
+            <div class="source-item">
+              <div class="source-dot"></div>
+              <a href="https://universosjuridicos.uv.mx/index.php/univerjuridicos/article/view/2663" target="_blank">El paradigma de los derechos humanos como base para una regulación de la inteligencia artificial global</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /s6 -->
+
+  <!-- VERDICT FINAL -->
+  <div class="verdict-card">
+    <div class="v-label">// mandato_estrategico.txt</div>
+    <div class="v-quote">"La inteligencia artificial no desplazará a los abogados chilenos. Sin embargo, los abogados que utilicen la IA <em>desplazarán indefectiblemente</em> a aquellos que se nieguen a hacerlo."</div>
+    <div class="v-sub">El momento de actuar, educarse y regular los procesos internos no es cuando se apruebe la ley — es hoy. El abogado del futuro actúa como un "director de orquesta" tecnológico, manteniendo siempre el juicio crítico y la responsabilidad ética.</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-text">Informe Jurídico — Regulación IA Chile 2026</div>
+    <div class="footer-text footer-mono">v1.0 · Abril 2026</div>
+  </div>
+
+</div><!-- /wrapper -->
+
+<script>
+  // ─── TOGGLE CARD ───
+  function toggleCard(btn) {
+    const card = btn.closest('.card');
+    card.classList.toggle('open');
+  }
+
+  // ─── TOGGLE ALL IN GROUP ───
+  function toggleAll(group, open) {
+    const container = document.querySelector(`[data-group="${group}"]`);
+    if (!container) return;
+    container.querySelectorAll('.card').forEach(card => {
+      if (open) card.classList.add('open');
+      else card.classList.remove('open');
+    });
+  }
+
+  // ─── SCROLL PROGRESS ───
+  const scrollBar = document.getElementById('scrollBar');
+  window.addEventListener('scroll', () => {
+    const scrollPct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    scrollBar.style.width = scrollPct + '%';
+  });
+
+  // ─── TOC DOTS ───
+  const sections = ['sec-0','sec-1','sec-2','sec-3','sec-4','sec-5','sec-6'];
+  const tocDots = document.querySelectorAll('.toc-dot');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = sections.indexOf(entry.target.id);
+        tocDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  tocDots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      const el = document.getElementById(sections[i]);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // ─── OPEN FIRST CARD IN EACH GROUP AUTO ───
+  document.querySelectorAll('[data-group]').forEach(group => {
+    const first = group.querySelector('.card');
+    if (first) first.classList.add('open');
+  });
+</script>
+</body>
+</html>
